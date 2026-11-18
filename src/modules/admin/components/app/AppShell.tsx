@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  Bell,
   CalendarCheck,
   CalendarClock,
   CheckCircle2,
@@ -15,8 +14,6 @@ import {
 
 import { Button } from "@/modules/admin/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/modules/admin/components/ui/sheet";
-import { Popover, PopoverContent, PopoverTrigger } from "@/modules/admin/components/ui/popover";
-import { useStore } from "@/modules/admin/lib/store";
 import { cn } from "@/modules/admin/lib/utils";
 import { RibbonFolderIcon } from "@/modules/admin/components/app/RibbonFolderIcon";
 
@@ -138,8 +135,6 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [folderClosing, setFolderClosing] = useState(false);
   const folderClosingTimer = useRef<number | undefined>(undefined);
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const { data } = useStore();
-  const pendingLeaves = data.leaves.filter((leave) => leave.status === "Pending").length;
 
 
 
@@ -179,41 +174,6 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="es-app-shell">
 
       <div className="es-app-content">
-        <header className="es-topbar no-print">
-          <div className="es-topbar-actions">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Notifications, 3 unread"
-                  className="es-icon-button es-bell"
-                >
-                  <Bell size={20} />
-                  <span className="es-notification-count">3</span>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent align="end" className="w-72 p-0">
-                <p className="border-b px-4 py-3 text-sm font-semibold">Notifications</p>
-                <ul className="divide-y text-sm">
-                  <li className="px-4 py-3">
-                    {pendingLeaves} leave requests are awaiting approval
-                  </li>
-                  <li className="px-4 py-3">3 students need urgent classes this week</li>
-                  <li className="px-4 py-3">Your weekly report is ready to view</li>
-                </ul>
-              </PopoverContent>
-            </Popover>
-            <span className="es-topbar-divider" aria-hidden="true" />
-            <button type="button" className="es-profile" aria-label="Harshika, Administrator">
-              <span className="es-avatar">H</span>
-              <span className="es-profile-copy">
-                <strong>Harshika</strong>
-                <small>Administrator</small>
-              </span>
-            </button>
-          </div>
-        </header>
         <main className={cn("es-main", path === "/admin" && "es-dashboard-main")}>{children}</main>
       </div>
     </div>
