@@ -2,12 +2,13 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import {
   LayoutDashboard, Megaphone, UserPlus, Wallet, GraduationCap, Users, Briefcase, Settings,
-  Bell, TrendingUp, HelpCircle, Sparkles, MoreHorizontal,
+  TrendingUp, Sparkles, MoreHorizontal,
   BarChart3, Activity, CircleDot, ShieldCheck, Landmark,
 } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import backdrop from "@/assets/backdrop.jpg";
 import { DockNav } from "@/components/DockNav";
+import { HeaderActions } from "@/components/HeaderActions";
 import { QuickTools, useAppTheme } from "@/components/QuickTools";
 
 export const menu = [
@@ -22,7 +23,7 @@ export const menu = [
   { title: "Settings", url: "/settings", icon: Settings },
 ] as const;
 
-/** Settings lives in the icon cluster, everything else in the pill bar. */
+/** Settings stays available in Search; everything else is in the pill bar. */
 const navItems = menu.filter((m) => m.url !== "/settings");
 
 function isActive(path: string, url: string) {
@@ -69,23 +70,13 @@ export function AppShell({
 
       <div className="relative z-10 flex min-h-screen flex-col">
         <header className={`${frame} pt-5`}>
-          <div className="flex items-center gap-4">
+          <div className="app-header-cylinder flex items-center gap-4">
             <Link to="/" className="flex shrink-0 items-center gap-2.5">
               <BrandMark />
-              <span className="text-xl font-bold tracking-tight">Manager Edu</span>
+              <span className="hidden text-xl font-bold tracking-tight min-[420px]:inline">Manager Edu</span>
             </Link>
             <DockNav items={navItems} isActive={active} className="mx-auto hidden lg:flex" />
-            <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0">
-              <button type="button" className="glass-icon" aria-label="Help"><HelpCircle className="size-[18px]" /></button>
-              <button type="button" className="glass-icon relative" aria-label="Notifications">
-                <Bell className="size-[18px]" />
-                <span className="absolute right-2.5 top-2.5 size-2 rounded-full bg-salmon ring-2 ring-background" />
-              </button>
-              <Link to="/settings" className="glass-icon xl:hidden" aria-label="Settings"><Settings className="size-[18px]" /></Link>
-              <span className="grid size-10 place-items-center rounded-full bg-cream text-sm font-bold text-lime-foreground ring-2 ring-glass-border" title="Praneeth · Administrator">
-                PR
-              </span>
-            </div>
+            <HeaderActions items={menu} />
           </div>
           <DockNav items={navItems} isActive={active} magnify={false} className="mt-4 lg:hidden" />
         </header>

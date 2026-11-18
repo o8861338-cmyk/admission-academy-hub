@@ -1324,6 +1324,7 @@
   border-radius: 0 0 0 52%;
   background: radial-gradient(ellipse, oklch(0.740 0.190 124.0 / 0.026) 0%, oklch(1.000 0.000 0.0 / 0.013) 48%, transparent 73%);
   content: "";
+  pointer-events: none;
   transform: rotate(-8deg);
 }
 

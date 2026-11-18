@@ -1,0 +1,100 @@
+import { Link } from "@tanstack/react-router";
+import { Bell, Check, Save, Search } from "lucide-react";
+import { useMemo, useState } from "react";
+
+import type { DockItem } from "@/components/DockNav";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+
+export function HeaderActions({ items }: { items: readonly DockItem[] }) {
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [saved, setSaved] = useState(false);
+
+  const results = useMemo(() => {
+    const search = query.trim().toLowerCase();
+    return search
+      ? items.filter((item) => item.title.toLowerCase().includes(search))
+      : items;
+  }, [items, query]);
+
+  function onSearchOpenChange(open: boolean) {
+    setSearchOpen(open);
+    if (!open) setQuery("");
+  }
+
+  function handleSave() {
+    try {
+      localStorage.setItem("manager-edu-last-saved", new Date().toISOString());
+    } catch {
+      // Saving feedback still works when browser storage is unavailable.
+    }
+    window.dispatchEvent(new CustomEvent("manager-edu:save"));
+    setSaved(true);
+    window.setTimeout(() => setSaved(false), 1600);
+  }
+
+  return (
+    <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0">
+      <Popover open={searchOpen} onOpenChange={onSearchOpenChange}>
+        <PopoverTrigger asChild>
+          <button type="button" className="glass-icon" aria-label="Search" title="Search">
+            <Search className="size-[18px]" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="end"
+          sideOffset={10}
+          collisionPadding={16}
+          className="header-search-popover w-80"
+        >
+          <label className="flex items-center gap-2 rounded-xl border bg-background px-3 py-2">
+            <Search className="size-4 shrink-0 text-muted-foreground" />
+            <input
+              autoFocus
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search pages..."
+              aria-label="Search pages"
+              className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+            />
+          </label>
+          <nav aria-label="Search results" className="mt-2 grid gap-1">
+            {results.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.url}
+                  to={item.url}
+                  onClick={() => onSearchOpenChange(false)}
+                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors hover:bg-accent"
+                >
+                  <Icon className="size-4 text-muted-foreground" />
+                  {item.title}
+                </Link>
+              );
+            })}
+            {results.length === 0 && (
+              <p className="px-3 py-5 text-center text-sm text-muted-foreground">No pages found</p>
+            )}
+          </nav>
+        </PopoverContent>
+      </Popover>
+
+      <button
+        type="button"
+        className="glass-icon"
+        aria-label={saved ? "Saved" : "Save"}
+        title={saved ? "Saved" : "Save"}
+        onClick={handleSave}
+      >
+        {saved ? <Check className="size-[18px] text-success" /> : <Save className="size-[18px]" />}
+      </button>
+
+      <button type="button" className="glass-icon relative" aria-label="Notifications" title="Notifications">
+        <Bell className="size-[18px]" />
+        <span className="absolute right-2.5 top-2.5 size-2 rounded-full bg-salmon ring-2 ring-background" />
+      </button>
+    </div>
+  );
+}
