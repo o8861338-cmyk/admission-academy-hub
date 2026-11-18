@@ -1544,6 +1544,53 @@ nav a { transition: background .25s, color .25s, border-color .25s; }
   }
   .icon-rail a:hover, .icon-rail button:hover { background: oklch(1 0 0 / 10%); color: var(--foreground); }
 
+  .quick-tools {
+    position: fixed;
+    left: 24px;
+    top: 50%;
+    z-index: 30;
+    align-items: center;
+    transform: translateY(-50%);
+  }
+  .quick-tools-panel {
+    width: 62px;
+    overflow: hidden;
+    opacity: 1;
+    transform: translateX(0);
+    transition: width .3s ease, opacity .2s ease, transform .3s ease;
+  }
+  .quick-tools[data-collapsed="true"] .quick-tools-panel {
+    width: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-18px);
+  }
+  .quick-tools-toggle {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 44px;
+    flex: 0 0 28px;
+    margin-left: 6px;
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    background: var(--glass-strong);
+    color: var(--foreground);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    transition: margin .3s ease, background .2s ease, transform .2s ease;
+  }
+  .quick-tools[data-collapsed="true"] .quick-tools-toggle { margin-left: 0; }
+  .quick-tools-toggle:hover { background: var(--accent); transform: scale(1.05); }
+  .quick-tools-toggle:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
+  .quick-tools-popover {
+    border-color: var(--glass-border);
+    border-radius: 20px;
+    background: var(--popover);
+    box-shadow: var(--shadow-card);
+  }
+
   .lime-btn {
     display: inline-flex;
     align-items: center;
@@ -1909,3 +1956,277 @@ nav a { transition: background .25s, color .25s, border-color .25s; }
   border-color: var(--glass-border);
   border-radius: 18px;
 }
+
+/* ---------------------------------------------------------------------
+ * Shared light mode. The dark remap is scoped to .solvik:not(.light), so
+ * embedded Tailwind modules naturally return to their original colours.
+ * --------------------------------------------------------------------- */
+.solvik.light {
+  color-scheme: light;
+  --background: oklch(0.965 0.008 120);
+  --foreground: oklch(0.25 0.02 150);
+  --card: oklch(1 0 0 / 88%);
+  --card-foreground: oklch(0.25 0.02 150);
+  --popover: oklch(0.995 0.003 120);
+  --popover-foreground: oklch(0.25 0.02 150);
+  --primary: oklch(0.48 0.11 145);
+  --primary-foreground: oklch(0.985 0.01 120);
+  --secondary: oklch(0.93 0.015 130);
+  --secondary-foreground: oklch(0.29 0.025 150);
+  --muted: oklch(0.94 0.01 120);
+  --muted-foreground: oklch(0.48 0.02 150);
+  --accent: oklch(0.92 0.035 130);
+  --accent-foreground: oklch(0.34 0.06 145);
+  --border: oklch(0.35 0.025 150 / 16%);
+  --input: oklch(0.35 0.025 150 / 22%);
+  --ring: oklch(0.52 0.11 145);
+  --glass: oklch(1 0 0 / 72%);
+  --glass-strong: oklch(1 0 0 / 90%);
+  --glass-border: oklch(0.35 0.025 150 / 16%);
+  --success: oklch(0.52 0.13 155);
+  --warning: oklch(0.55 0.11 70);
+  --chart-1: oklch(0.58 0.16 40);
+  --chart-2: oklch(0.5 0.09 230);
+  --chart-3: oklch(0.5 0.13 135);
+  --chart-4: oklch(0.55 0.08 85);
+  --chart-5: oklch(0.52 0.12 300);
+  --shadow-card: 0 1px 2px oklch(0.3 0.05 150 / 5%), 0 18px 45px -28px oklch(0.3 0.06 150 / 28%);
+  --shadow-glow: 0 10px 30px -14px oklch(0.45 0.09 150 / 35%);
+  --sidebar: oklch(1 0 0 / 76%);
+  --sidebar-foreground: oklch(0.25 0.02 150);
+  --sidebar-primary: oklch(0.48 0.11 145);
+  --sidebar-primary-foreground: oklch(0.985 0.01 120);
+  --sidebar-accent: oklch(0.92 0.035 130);
+  --sidebar-accent-foreground: oklch(0.34 0.06 145);
+  --sidebar-border: oklch(0.35 0.025 150 / 16%);
+  --sidebar-ring: oklch(0.52 0.11 145);
+  --module-start: oklch(1 0 0 / 82%);
+  --module-middle: oklch(0.97 0.012 120 / 88%);
+  --module-end: oklch(0.94 0.02 120 / 92%);
+  --module-foreground: oklch(0.25 0.02 150);
+  --module-muted: oklch(0.48 0.02 150);
+  --module-border: oklch(0.35 0.025 150 / 16%);
+  --module-active: oklch(0.48 0.11 145 / 12%);
+  color: var(--foreground);
+  background-color: var(--background);
+}
+.solvik.light .solvik-backdrop::after {
+  background:
+    radial-gradient(ellipse at 50% 120%, transparent 25%, oklch(0.94 0.015 120 / 45%) 78%),
+    linear-gradient(180deg, oklch(1 0 0 / 72%), oklch(0.94 0.015 120 / 82%));
+}
+.solvik.light :is(.dock-nav, .icon-rail, .pill-nav, .segmented, .glass-icon, .ghost-btn, .quick-tools-toggle) {
+  background: var(--glass);
+  border-color: var(--glass-border);
+}
+.solvik.light :is(.pill-link, .icon-rail a, .icon-rail button) { color: var(--muted-foreground); }
+.solvik.light :is(.pill-link, .icon-rail a, .icon-rail button):hover {
+  color: var(--foreground);
+  background: var(--accent);
+}
+.solvik.light :is(.pill-link[data-active="true"], .pill-link.is-active, .segmented button[data-active="true"]) {
+  color: var(--foreground);
+  background: var(--glass-strong);
+  box-shadow: 0 2px 8px oklch(0.3 0.04 150 / 8%);
+}
+.solvik.light .dock-label {
+  color: var(--foreground);
+  background: var(--popover);
+  border-color: var(--glass-border);
+}
+.solvik.light .glass-tile:hover { background: var(--glass-strong); }
+.solvik.light .glass-lime {
+  background: linear-gradient(160deg, color-mix(in oklab, var(--lime) 24%, var(--glass)), var(--glass) 70%);
+}
+.solvik.light :is(input, select, textarea) { color-scheme: light; }
+.solvik.light .recharts-cartesian-grid line { stroke: oklch(0.35 0.025 150 / 14%); }
+.solvik.light .recharts-text { fill: var(--muted-foreground); }
+.solvik.light .recharts-default-tooltip {
+  color: var(--foreground);
+  background: var(--popover) !important;
+  border-color: var(--glass-border) !important;
+}
+
+.solvik.light :is(.admin-module, .finance-module, .academic-module) {
+  color-scheme: light;
+  --color-scheme: light;
+  --surface-glass: oklch(1 0 0 / 90%);
+  --background: transparent;
+  --foreground: oklch(0.25 0.02 150);
+  --card: var(--surface-glass);
+  --card-foreground: oklch(0.25 0.02 150);
+  --popover: oklch(0.995 0.003 120);
+  --popover-foreground: oklch(0.25 0.02 150);
+  --primary: oklch(0.48 0.11 145);
+  --primary-foreground: oklch(0.985 0.01 120);
+  --secondary: oklch(0.93 0.015 130);
+  --secondary-foreground: oklch(0.29 0.025 150);
+  --muted: oklch(0.94 0.01 120);
+  --muted-foreground: oklch(0.48 0.02 150);
+  --accent: oklch(0.92 0.035 130);
+  --accent-foreground: oklch(0.34 0.06 145);
+  --destructive: oklch(0.55 0.2 28);
+  --destructive-foreground: oklch(0.985 0.01 120);
+  --success: oklch(0.52 0.13 155);
+  --warning: oklch(0.55 0.11 70);
+  --info: oklch(0.5 0.09 220);
+  --border: oklch(0.35 0.025 150 / 16%);
+  --input: oklch(0.35 0.025 150 / 22%);
+  --ring: oklch(0.52 0.11 145);
+  --sidebar: oklch(1 0 0 / 82%);
+  --sidebar-gradient: linear-gradient(180deg, oklch(1 0 0 / 90%), oklch(0.96 0.015 120 / 90%));
+  --sidebar-bg: linear-gradient(180deg, oklch(1 0 0 / 90%), oklch(0.96 0.015 120 / 90%));
+  --sidebar-foreground: oklch(0.25 0.02 150);
+  --sidebar-muted: oklch(0.48 0.02 150);
+  --sidebar-primary: oklch(0.48 0.11 145);
+  --sidebar-primary-foreground: oklch(0.985 0.01 120);
+  --sidebar-accent: oklch(0.92 0.035 130);
+  --sidebar-accent-foreground: oklch(0.34 0.06 145);
+  --sidebar-border: oklch(0.35 0.025 150 / 16%);
+  --sidebar-ring: oklch(0.52 0.11 145);
+  --sidebar-indicator: oklch(0.48 0.11 145);
+  --shadow-panel: 0 18px 45px -28px oklch(0.3 0.06 150 / 28%);
+  background-color: transparent;
+}
+.solvik.light .finance-module {
+  --bg: transparent;
+  --surface: var(--surface-glass);
+  --text: oklch(0.25 0.02 150);
+  --text-muted: oklch(0.48 0.02 150);
+  --primary-soft: oklch(0.48 0.11 145 / 12%);
+  --overlay: oklch(0.15 0.02 150 / 48%);
+  --rail-bg: oklch(1 0 0 / 80%);
+  --rail-active: oklch(0.48 0.11 145 / 12%);
+  --danger-soft: oklch(0.58 0.18 28 / 12%);
+  --success-soft: oklch(0.52 0.13 155 / 12%);
+  --warning-soft: oklch(0.62 0.13 80 / 16%);
+  --info-soft: oklch(0.5 0.09 220 / 12%);
+  --application-ink: oklch(0.25 0.02 150);
+  --application-line: oklch(0.35 0.025 150 / 16%);
+  --application-surface: var(--surface-glass);
+  --application-table-header: oklch(0.94 0.01 120);
+  --sage: oklch(0.5 0.06 145);
+  --sage-soft: oklch(0.72 0.06 145);
+  --sage-pale: oklch(0.94 0.025 130);
+  --ivory: transparent;
+}
+.solvik.light .academic-module {
+  --soft-ivory: transparent;
+  --white: var(--surface-glass);
+  --primary-text: oklch(0.25 0.02 150);
+  --secondary-text: oklch(0.48 0.02 150);
+  --border: oklch(0.35 0.025 150 / 16%);
+  --surface-shadow: 0 18px 45px -28px oklch(0.3 0.06 150 / 28%);
+}
+.solvik.light .academic-module :is(.text-slate-800, .text-slate-700) { color: oklch(0.32 0.02 150); }
+.solvik.light .academic-module :is(.text-slate-600, .text-slate-500, .text-slate-400) { color: var(--muted-foreground); }
+.solvik.light .academic-module :is(.bg-slate-100, .bg-slate-200\/70) { background-color: oklch(0.94 0.01 120); }
+.solvik.light .academic-module :is(.border-slate-100, .divide-slate-100 > :not(:last-child)) { border-color: var(--border); }
+.solvik.light .academic-module main :is(.rounded-2xl, .rounded-3xl).bg-white { background-color: var(--glass); }
+.solvik.light .academic-module main :is(.rounded-xl, .rounded-lg).bg-white { background-color: var(--glass-strong); }
+.solvik.light .academic-module .dashboard-metrics .dashboard-stat-icon { background: var(--accent); }
+.solvik.light .academic-module .dashboard-welcome {
+  background: linear-gradient(160deg, color-mix(in oklab, var(--lime) 24%, var(--glass)), var(--glass) 70%);
+}
+.solvik.light .academic-module [role="dialog"] { background-color: var(--popover); }
+
+/* Custom module surfaces that predate the shared semantic tokens. */
+.solvik.light .admin-module :is(
+  .skillai-leave-letter,
+  .skillai-slip-form,
+  .es-nav-item:hover,
+  .es-nav-divider,
+  .es-topbar,
+  .es-date-pill,
+  .es-select-pill,
+  .es-metric,
+  .es-tone-teal,
+  .es-tone-green,
+  .es-tone-orange,
+  .es-tone-blue,
+  .es-tone-red,
+  .es-card,
+  .es-month-nav button
+) {
+  background: var(--card);
+  border-color: var(--border);
+}
+.solvik.light .admin-module :is(
+  .skillai-leave-letter,
+  .skillai-slip-form,
+  .es-app-shell,
+  .es-brand-copy span,
+  .es-nav-caption,
+  .es-profile-copy strong,
+  .es-greeting h1,
+  .es-metric-value,
+  .es-title-wrap h2,
+  .es-card-heading > h2,
+  .es-leave-request-copy strong,
+  .es-month-nav strong,
+  .es-distribution-total strong,
+  .es-activity-copy strong
+) { color: var(--foreground); }
+.solvik.light .admin-module :is(
+  .es-eyebrow,
+  .es-greeting-subtitle,
+  .es-title-wrap p,
+  .es-chart-legend,
+  .es-leave-request-copy small,
+  .es-leave-empty,
+  .es-calendar-legend,
+  .es-distribution-total span,
+  .es-distribution-legend li
+) { color: var(--muted-foreground); }
+.solvik.light .admin-module .es-dashboard-main { background: transparent; }
+.solvik.light .admin-module .es-tone-teal { color: var(--primary); }
+.solvik.light .admin-module :is(.es-icon-teal, .es-icon-blue, .es-heading-icon) { background: var(--accent); }
+.solvik.light .admin-module :is(.es-metric-change, .es-action-tile > span) { background: var(--accent); }
+.solvik.light .admin-module .es-promo-button {
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+.solvik.light .admin-module :is(.es-leave-request-list li) { border-color: var(--border); }
+
+.solvik.light .finance-module :is(.dashboard-glass-card, .financial-report-print) {
+  color: var(--foreground);
+  background: var(--card);
+}
+.solvik.light .finance-module .dashboard-chart-plot { background: var(--muted); }
+
+.solvik.light .academic-module :is(.custom-dropdown-label) { color: var(--foreground); }
+.solvik.light .academic-module :is(
+  .custom-dropdown-trigger,
+  .custom-dropdown-trigger:hover:not(:disabled),
+  .custom-dropdown-panel,
+  .syllabus-history-summary > div
+) { background: var(--card); }
+.solvik.light .academic-module .portal-header { background: transparent; }
+
+.solvik.light .admin-module .es-ai-card {
+  color: oklch(0.97 0.006 110);
+  background:
+    radial-gradient(ellipse at 100% 34%, oklch(0.63 0.152 124 / 23%), transparent 45%),
+    linear-gradient(145deg, #164e63, #185867 70%, #1d6c70);
+}
+.solvik.light .admin-module .es-ai-card .es-student-copy small { color: oklch(0.88 0.025 140); }
+.solvik.light .academic-module {
+  --deep-burgundy: oklch(0.48 0.11 145);
+  --deep-burgundy-dark: oklch(0.4 0.09 145);
+  --rose: oklch(0.48 0.11 145);
+}
+.solvik.light .academic-module :is(
+  .text-indigo-950,
+  .text-indigo-900,
+  .text-indigo-800,
+  .text-indigo-700,
+  .text-indigo-600,
+  .text-violet-900,
+  .text-violet-700,
+  .text-violet-600,
+  .text-violet-500,
+  .text-lime-900,
+  .text-lime-800,
+  .text-lime-700,
+  .text-lime-600
+) { color: var(--primary); }

@@ -2,12 +2,13 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import {
   LayoutDashboard, Megaphone, UserPlus, Wallet, GraduationCap, Users, Briefcase, Settings,
-  Search, Bell, Plus, TrendingUp, HelpCircle, Sparkles, MoreHorizontal,
-  BarChart3, Activity, CircleDot, ShieldCheck, Landmark, Star, CalendarDays, Send, Share2, Upload, Sun,
+  Bell, TrendingUp, HelpCircle, Sparkles, MoreHorizontal,
+  BarChart3, Activity, CircleDot, ShieldCheck, Landmark,
 } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import backdrop from "@/assets/backdrop.jpg";
 import { DockNav } from "@/components/DockNav";
+import { QuickTools, useAppTheme } from "@/components/QuickTools";
 
 export const menu = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
@@ -39,16 +40,6 @@ export function BrandMark() {
   );
 }
 
-const railItems = [
-  { label: "Search", icon: Search },
-  { label: "Quick add", icon: Plus },
-  { label: "Favourites", icon: Star },
-  { label: "Calendar", icon: CalendarDays },
-  { label: "Messages", icon: Send },
-  { label: "Share", icon: Share2 },
-  { label: "Export", icon: Upload },
-] as const;
-
 /** Shared horizontal frame so header, rail gutter and page content line up. */
 const frame = "mx-auto w-full max-w-[1720px] px-4 sm:px-6 xl:pl-32 xl:pr-10";
 
@@ -66,29 +57,15 @@ export function AppShell({
   header?: ReactNode;
 }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const { theme, setTheme } = useAppTheme();
 
   const active = (url: string) => isActive(path, url);
 
   return (
-    <div className="solvik relative min-h-screen w-full font-sans">
+    <div className={`solvik relative min-h-screen w-full font-sans ${theme === "light" ? "light" : ""}`}>
       <div className="solvik-backdrop" style={{ backgroundImage: `url(${backdrop})` }} aria-hidden />
 
-      <aside className="fixed left-6 top-1/2 z-30 hidden -translate-y-1/2 xl:block" aria-label="Quick tools">
-        <div className="icon-rail">
-          {railItems.map((r) => (
-            <button key={r.label} type="button" aria-label={r.label} title={r.label}>
-              <r.icon className="size-[18px]" />
-            </button>
-          ))}
-          <span className="my-1 h-px w-6 bg-glass-border" />
-          <Link to="/settings" aria-label="Settings" title="Settings">
-            <Settings className="size-[18px]" />
-          </Link>
-          <button type="button" aria-label="Appearance" title="Appearance">
-            <Sun className="size-[18px]" />
-          </button>
-        </div>
-      </aside>
+      <QuickTools theme={theme} onThemeChange={setTheme} />
 
       <div className="relative z-10 flex min-h-screen flex-col">
         <header className={`${frame} pt-5`}>
