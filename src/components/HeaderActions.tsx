@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Bell, Check, Save, Search } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import type { DockItem } from "@/components/DockNav";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -16,6 +16,18 @@ export function HeaderActions({ items }: { items: readonly DockItem[] }) {
       ? items.filter((item) => item.title.toLowerCase().includes(search))
       : items;
   }, [items, query]);
+
+  // Zoho-style shortcut: Ctrl/Cmd + K opens the search box from anywhere.
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setSearchOpen(true);
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   function onSearchOpenChange(open: boolean) {
     setSearchOpen(open);
@@ -37,12 +49,14 @@ export function HeaderActions({ items }: { items: readonly DockItem[] }) {
     <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0">
       <Popover open={searchOpen} onOpenChange={onSearchOpenChange}>
         <PopoverTrigger asChild>
-          <button type="button" className="glass-icon" aria-label="Search" title="Search">
-            <Search className="size-[18px]" />
+          <button type="button" className="header-search-field" aria-label="Search" title="Search (Ctrl K)">
+            <Search className="size-4 shrink-0" />
+            <span className="flex-1 text-left">Search</span>
+            <kbd className="header-search-kbd">Ctrl K</kbd>
           </button>
         </PopoverTrigger>
         <PopoverContent
-          align="end"
+          align="start"
           sideOffset={10}
           collisionPadding={16}
           className="header-search-popover w-80"
@@ -83,12 +97,14 @@ export function HeaderActions({ items }: { items: readonly DockItem[] }) {
 
       <button
         type="button"
-        className="glass-icon"
+        className="header-save-btn"
+        data-saved={saved ? "" : undefined}
         aria-label={saved ? "Saved" : "Save"}
         title={saved ? "Saved" : "Save"}
         onClick={handleSave}
       >
-        {saved ? <Check className="size-[18px] text-success" /> : <Save className="size-[18px]" />}
+        {saved ? <Check className="size-4" /> : <Save className="size-4" />}
+        <span>{saved ? "Saved" : "Save"}</span>
       </button>
 
       <button type="button" className="glass-icon relative" aria-label="Notifications" title="Notifications">

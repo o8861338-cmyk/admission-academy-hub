@@ -1360,6 +1360,54 @@ nav a { transition: background .25s, color .25s, border-color .25s; }
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
+  /* Zoho-style header controls: a wide search field and a solid Save button. */
+  .header-search-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: 200px;
+    height: 40px;
+    padding: 0 6px 0 14px;
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    background: oklch(1 0 0 / 6%);
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    transition: border-color .2s ease, background .2s ease, color .2s ease;
+  }
+  .header-search-field:hover,
+  .header-search-field[data-state="open"] {
+    border-color: var(--primary);
+    background: var(--glass-strong);
+    color: var(--foreground);
+  }
+  .header-search-kbd {
+    padding: 3px 8px;
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--muted-foreground);
+  }
+  .header-save-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 18px 0 14px;
+    border-radius: 999px;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 6px 18px -8px var(--primary);
+    transition: filter .2s ease, transform .2s ease, background .2s ease;
+  }
+  .header-save-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .header-save-btn:active { transform: translateY(0); }
+  .header-save-btn[data-saved] { background: var(--success); color: var(--success-foreground, var(--primary-foreground)); }
   .header-search-popover {
     padding: 10px;
     border-color: var(--glass-border);
@@ -2258,3 +2306,5 @@ nav a { transition: background .25s, color .25s, border-color .25s; }
   .text-lime-700,
   .text-lime-600
 ) { color: var(--primary); }
+
+.solvik.light .header-search-field { background: oklch(1 0 0 / 80%); }
